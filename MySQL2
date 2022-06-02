@@ -1,0 +1,47 @@
+select id_cabang, alamat_cabang from cabang
+where jml_pegawai > 0;
+
+select id_cabang, day(tgl_didirikan), month(tgl_didirikan),
+year(tgl_didirikan) from cabang 
+where jml_pegawai = (select max(jml_pegawai) from cabang);
+
+select nama_pegawai from pegawai
+where aktif ='1';
+
+select nama_pegawai, substr(alamat_pegawai, 7, (length(alamat_pegawai)-6)) from pegawai;
+
+select nama_pegawai from pegawai 
+where length(alamat_pegawai) = (select max(length(alamat_pegawai)) from pegawai);
+
+select min(harga), max(harga) from produk;
+
+select nama_produk from produk 
+where harga = (select min(harga) from produk) OR harga = (select max(harga) from produk);
+
+select avg(harga) from produk;
+
+select nama_produk from produk
+where harga > (select avg(harga) from produk);
+
+select nama_produk from produk 
+where year(exp_date) = '2018';
+
+select nama_produk from produk 
+where month(exp_date) = 05;
+
+select concat(nama_produk, " kadaluarsa tanggal ", day(exp_date), " bulan ", month(exp_date), " tahun ", year(exp_date)) from produk;
+
+select cabang.id_cabang, nama_pegawai from cabang, pegawai
+where cabang.id_cabang = pegawai.id_cabang AND aktif = '1';
+
+select DISTINCT(cabang.id_cabang), nama_produk 
+from cabang, pegawai, produk, produk_pegawai
+where cabang.id_cabang = pegawai.id_cabang AND 
+pegawai.id_pegawai = produk_pegawai.id_pegawai AND
+produk.id_produk = produk.id_produk;
+
+select DISTINCT(nama_pegawai), nama_produk from 
+pegawai, produk, produk_pegawai, cabang
+where pegawai.id_cabang = (select id_cabang from cabang where alamat_cabang LIKE('%melati%'))
+AND pegawai.id_pegawai = produk_pegawai.id_pegawai
+AND produk_pegawai.id_produk = produk.id_produk;
